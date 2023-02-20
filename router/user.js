@@ -15,7 +15,7 @@ router.post("/authenticate",userControll.verifyUser,(req,res)=>res.end());
 router.post("/login",userControll.verifyUser,userControll.userLogin);
 router.post('/verifyuser',userControll.userOtpverify)
 router.post('/checkout',checkoutControll.checkout)
-router.post('/paymentVerification',userAuth.isAuth,checkoutControll.paymentVerification)
+router.post('/paymentVerification/:amount',checkoutControll.paymentVerification)
 
 /** Get methods */
 router.get("/user/:username",userControll.getUser);

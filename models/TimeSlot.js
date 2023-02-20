@@ -7,7 +7,7 @@ const SlotSchema = mongoose.Schema({
     require: true,
   },
   date: {
-    type: Date,
+    type: String,
   },
   game: {
     type: String,

@@ -24,8 +24,6 @@ app.use("/api", userRout);
 app.use("/api/turfAdmin", TurfAdminRout);
 app.use("/api/admin", adminRout);
 
-const connect = require("./database/connect.js");
-
 mongoose.set("strictQuery", true);
 mongoose
   .connect(process.env.MONGO_URL)

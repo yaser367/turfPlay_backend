@@ -197,24 +197,46 @@ const uploadDoc = async (req, res) => {
 
 const addSlot = async (req, res) => {
   try {
-    const { id, slot, date, game } = req.body;
-    const existSlot = await Slots.findOne({ TurfId: id, date, game });
+    const { id, slot, date, play } = req.body;
+
+    const dates = new Date(date);
+    const dateString = dates.toLocaleDateString();
+    const existSlot = await Slots.findOne({
+      TurfId: id,
+      date: dateString,
+      game: play,
+    });
+
     if (!existSlot) {
       const newSlot = new Slots({
         TurfId: id,
-        date,
-        game,
+        date: dateString,
+        game: play,
         slots: [{ slot }],
       });
       await newSlot.save();
-      res.status(200).send({ message: "saved" });
+      return res.status(200).send({ message: "saved" });
     } else {
-      await Slots.findOneAndUpdate({ TurfId: id, date, game },{$push:{slots:{slot}}});
-      res.status(200).send({ message: "saved" });
+      const s = existSlot.slots;
+      let a = false;
+      s.map((sl) => {
+        if (sl.slot == slot) {
+          a = true;
+        }
+      });
 
+      if (a === true) {
+        return res.status(401).send({ error: "slot already exist" });
+      } else {
+        await Slots.findOneAndUpdate(
+          { TurfId: id, date: dateString, game: play },
+          { $push: { slots: { slot } } }
+        );
+        return res.status(200).send({ message: "saved" });
+      }
     }
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.status(401).send(error);
   }
 };
@@ -238,6 +260,22 @@ const getTurf = async (req, res) => {
   } catch (error) {}
 };
 
+const getslot = async (req, res) => {
+  try {
+    const { id, game } = req.headers;
+    const { date } = req.params;
+    // const d = new Date();
+    // console.log(d.getHours());
+    const dates = new Date(date);
+    const dateString = dates.toLocaleDateString();
+
+    const slot = await Slots.findOne({ TurfId: id, game, dateString });
+    res.status(200).send({ slot });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   addTurf,
   uploadImage,
@@ -250,4 +288,5 @@ module.exports = {
   addSlot,
   deleteTurfImg,
   getTurf,
+  getslot,
 };

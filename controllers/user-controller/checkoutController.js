@@ -9,7 +9,7 @@ const instance = new Razorpay({
 
 const checkout = async (req, res) => {
   try {
-    const { amount } = req.body;
+    const { amount, slot, game, id } = req.body;
     const options = {
       amount: Number(amount) * 100,
       currency: "INR",
@@ -27,8 +27,8 @@ const paymentVerification = async (req, res) => {
   try {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
       req.body;
+    console.log(req.params);
     let body = razorpay_order_id + "|" + razorpay_payment_id;
-
     const expectedSignature = crypto
       .createHmac("sha256", process.env.RAZORPAY_KEY_SCRETE)
       .update(body.toString())
@@ -44,7 +44,6 @@ const paymentVerification = async (req, res) => {
     } else {
       res.status(400).send({ error: "something went wrong..." });
     }
-   
   } catch (error) {}
 };
 
