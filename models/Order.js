@@ -9,7 +9,10 @@ const orderSchema = mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
-    require: true,
+  
+  },
+  username:{
+    type:String
   },
   razorpay_order_id: {
     type: String,
@@ -29,7 +32,8 @@ const orderSchema = mongoose.Schema({
   },
   amount:{
     type:String
-  }
+  },
+  
 });
 
 module.exports = mongoose.model("Order", orderSchema);

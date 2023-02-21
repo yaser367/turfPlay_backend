@@ -10,9 +10,9 @@ require("dotenv").config();
 const app = express();
 
 app.use(credentials);
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors(corsOptions, { Credentials: true }));
 app.use(morgan("dev"));
 app.disable("x-powered-by"); //less hackers know about our stack
 
