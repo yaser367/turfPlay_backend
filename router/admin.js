@@ -20,7 +20,6 @@ router.put(
 router.put("/blockTurfAdmin/:id", adminController.blockTurfAdmin);
 router.put("/acceptReq", adminController.acceptRequest);
 router.put("/rejectReq", adminController.rejectRequest);
-
 /** Post routes */
 router.post("/login", adminAuth.login);
 
