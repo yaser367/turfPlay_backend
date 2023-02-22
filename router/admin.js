@@ -9,6 +9,8 @@ const auth = require("../middleware/auth");
 router.get("/users", adminController.getUserData);
 router.get("/turfAdmin", adminController.getTurfAdminData);
 router.get("/getTurfRequest", adminController.getTurfRequest);
+router.get("/getAllOrder",adminController.getAllOrder)
+router.get("/totalSale",adminController.totalSale)
 
 /** Put routes */
 router.put(

@@ -1,6 +1,7 @@
 const User = require("../../models/User");
 const TurfAdmin = require("../../models/TurfAdmin");
 const Turf = require("../../models/Turf");
+const Order = require("../../models/Order");
 
 const getUserData = async (req, res) => {
   try {
@@ -56,7 +57,7 @@ const blockTurfAdmin = async (req, res) => {
         { _id: id },
         { $set: { isVerified: false } }
       );
-      await Turf.updateMany({TurfAdminId:id},{$set:{isListed:false}})
+      await Turf.updateMany({ TurfAdminId: id }, { $set: { isListed: false } });
       return res.status(200).send("user blocked");
     }
     const blockedUser = await TurfAdmin.findOne({ _id: id, isVerified: false });
@@ -110,6 +111,50 @@ const rejectRequest = async (req, res) => {
   }
 };
 
+const getAllOrder = async (req, res) => {
+  try {
+    const order = await Order.find({});
+    res.status(200).send({ order });
+  } catch (error) {}
+};
+
+const totalSale = async (req, res) => {
+  try {
+    const totalsales = await Order.aggregate([
+      {
+        $group: {
+          _id: {
+            month: {
+              $month: "$createdAt",
+            },
+            year: {
+              $year: "$createdAt",
+            },
+          },
+          totalPrice: { $sum: "$amount" },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          totalPrice: 1,
+          _id: 1,
+        },
+      },
+      {
+        $sort: {
+          _id: -1,
+        },
+      },
+      {
+        $limit: 6,
+      },
+    ]);
+
+    res.status(200).send({totalsales})
+  } catch (error) {}
+};
+
 module.exports = {
   getUserData,
   getTurfAdminData,
@@ -119,4 +164,6 @@ module.exports = {
   getTurfRequest,
   acceptRequest,
   rejectRequest,
+  getAllOrder,
+  totalSale,
 };

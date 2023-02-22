@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const orderSchema = mongoose.Schema({
   turfId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "turf",
+    ref: "Turf",
     require: true,
   },
   userId: {
@@ -34,6 +34,8 @@ const orderSchema = mongoose.Schema({
     type:String
   },
   
+},{
+  timestamps: true
 });
 
 module.exports = mongoose.model("Order", orderSchema);

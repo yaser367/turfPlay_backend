@@ -280,14 +280,30 @@ const getslot = async (req, res) => {
 const getOrders = async (req, res) => {
   try {
     const { id } = req.params;
-    const page = req.params.page || 0;
+    console.log(id);
+    const page = req.headers.page || 0;
+    console.log(page);
     const docsPerPage = 6;
-    const count = await Order.find({ turfId: id }).count;
+    const count = await Order.find({ turfId: id }).count();
     const totalPage = Math.ceil(count / docsPerPage);
     const order = await Order.find({ turfId: id })
+      .populate("turfId")
       .skip(page * docsPerPage)
-      .limit(docsPerPage);
-    res.status(200).send({ order,totalPage });
+      .limit(docsPerPage)
+      .sort({ date: -1 });
+    res.status(200).send({ order, totalPage });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const bookSlot = async(req,res) => {
+  try {
+    const {id,play,date,slot} = req.body;
+    const stringDate = new Date(date).toLocaleDateString()
+    console.log(stringDate)
+    await Slots.updateOne({TurfId:id ,game:play,date:stringDate,slots:{$elemMatch:{slot}}},{$set:{"slots.$.booked":true}})
+    res.status(200).send({message:"booked"});
   } catch (error) {
     console.log(error);
   }
@@ -307,4 +323,5 @@ module.exports = {
   getTurf,
   getslot,
   getOrders,
+  bookSlot,
 };

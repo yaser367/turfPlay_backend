@@ -19,13 +19,14 @@ router.post("/imgUpload", turfController.uploadImage);
 router.post("/docUpload", turfController.uploadDoc);
 router.post("/addTimeSlot", turfController.addSlot);
 
+
 /** Get routes */
 router.get("/getAllturf", turfController.getAllturf);
 router.get("/getoneTurf/:id", turfController.oneTurf);
 router.get("/getTurfAdmin/:id", TurfAdminControll.getTufAdmin);
 router.get("/get/:id",turfController.getTurf)
 router.get("/getSlot/:date",turfController.getslot)
-router.get("/getOrder/:id/:page",turfController.getOrders)
+router.get("/getOrder/:id",turfController.getOrders)
 
 /** Put routes */
 router.put("/updateTurf", turfController.uploadImage);
@@ -35,5 +36,6 @@ router.put("/updateProfile", TurfAdminControll.updateProfile);
 router.put("/editTurf", turfController.editTurf);
 router.put("/deleteImg", turfController.deleteTurfImg);
 router.put("/addTimeslot", turfController.addSlot);
+router.put('/bookSlot',turfController.bookSlot)
 
 module.exports = router;
