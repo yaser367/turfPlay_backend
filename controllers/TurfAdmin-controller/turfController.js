@@ -1,6 +1,8 @@
 const Turf = require("../../models/Turf");
 const TurfAdmin = require("../../models/TurfAdmin");
 const Slots = require("../../models/TimeSlot");
+const Order = require("../../models/Order");
+
 const addTurf = async (req, res) => {
   try {
     const {
@@ -264,13 +266,28 @@ const getslot = async (req, res) => {
   try {
     const { id, game } = req.headers;
     const { date } = req.params;
-    // const d = new Date();
-    // console.log(d.getHours());
+
     const dates = new Date(date);
     const dateString = dates.toLocaleDateString();
 
-    const slot = await Slots.findOne({ TurfId: id, game, dateString });
+    const slot = await Slots.findOne({ TurfId: id, game, date: dateString });
     res.status(200).send({ slot });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getOrders = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const page = req.params.page || 0;
+    const docsPerPage = 6;
+    const count = await Order.find({ turfId: id }).count;
+    const totalPage = Math.ceil(count / docsPerPage);
+    const order = await Order.find({ turfId: id })
+      .skip(page * docsPerPage)
+      .limit(docsPerPage);
+    res.status(200).send({ order,totalPage });
   } catch (error) {
     console.log(error);
   }
@@ -289,4 +306,5 @@ module.exports = {
   deleteTurfImg,
   getTurf,
   getslot,
+  getOrders,
 };

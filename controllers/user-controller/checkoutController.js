@@ -1,6 +1,7 @@
 const Razorpay = require("razorpay");
 const crypto = require("crypto");
 const Order = require("../../models/Order");
+const Slot = require("../../models/TimeSlot")
 
 let instance = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
@@ -10,12 +11,13 @@ let instance = new Razorpay({
 const checkout = async (req, res) => {
   try {
     const { amount, slot, game, id,username,date } = req.body;
-    console.log(username)
     const options = {
       amount: Number(amount) * 100,
       currency: "INR",
       receipt: "order_rcptid_11",
     };
+    const d = new Date(date)
+    const dateString = d.toLocaleDateString()
   
     const order = await instance.orders.create(options);
    
@@ -24,11 +26,12 @@ const checkout = async (req, res) => {
       username,
       game,
       amount,
-      date,
+      date:dateString,
       slot
     })
-    const ord = await payment.save()
-    res.status(200).send({ order,ord });
+    const booking = await payment.save()
+    console.log(booking)
+    res.status(200).send({ order,booking });
   } catch (error) {
     console.log(error);
     res.status(500).send(error);
@@ -39,6 +42,8 @@ const paymentVerification = async (req, res) => {
   try {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
       req.body;
+      const {id,turfId} = req.params;
+      console.log(id)
     let body = razorpay_order_id + "|" + razorpay_payment_id;
     const expectedSignature = crypto
       .createHmac("sha256", process.env.RAZORPAY_KEY_SCRETE)
@@ -47,10 +52,12 @@ const paymentVerification = async (req, res) => {
     const isAuthentic = expectedSignature === razorpay_signature;
 
     if (isAuthentic) {
-      const order = new Order({
-        razorpay_order_id,
-      });
-      await order.save();
+      await Order.findOneAndUpdate({_id:id},{$set:{payement:true}})
+      const order = await Order.findOne({_id:id})
+      const date = order.date
+      const game = order.game
+      const slot = order.slot
+      const slotUpdate = await Slot.updateOne({TurfId:turfId ,game,date,slots:{$elemMatch:{slot}}},{$set:{"slots.$.booked":true}})
       return res.status(200).redirect(`${process.env.FRONTEND_DOMIN}/orderSuccess`)
     } else {
       res.status(400).send({ error: "something went wrong..." });

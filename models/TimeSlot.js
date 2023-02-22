@@ -26,8 +26,7 @@ const SlotSchema = mongoose.Schema({
         default: false,
       },
       userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "user",
+        type:String
       },
     },
   ],

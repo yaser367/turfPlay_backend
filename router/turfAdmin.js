@@ -25,6 +25,7 @@ router.get("/getoneTurf/:id", turfController.oneTurf);
 router.get("/getTurfAdmin/:id", TurfAdminControll.getTufAdmin);
 router.get("/get/:id",turfController.getTurf)
 router.get("/getSlot/:date",turfController.getslot)
+router.get("/getOrder/:id/:page",turfController.getOrders)
 
 /** Put routes */
 router.put("/updateTurf", turfController.uploadImage);
