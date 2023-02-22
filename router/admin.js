@@ -15,7 +15,6 @@ router.get("/totalSale",adminController.totalSale)
 /** Put routes */
 router.put(
   "/blockUser/:id",
-
   adminController.blockUser
 );
 router.put("/blockTurfAdmin/:id", adminController.blockTurfAdmin);

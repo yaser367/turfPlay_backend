@@ -6,6 +6,7 @@ const TurfAdminControll = require("../controllers/TurfAdmin-controller/TurfAdmin
 const Auth = require("../middleware/auth");
 const mailControll = require("../controllers/user-controller/mail-controller");
 const turfController = require("../controllers/TurfAdmin-controller/turfController");
+const verifyJWT = require("../middleware/Jwt")
 
 /** Post routes */
 router.post("/login", TurfAdminAuthControll.handleLogin);
@@ -21,12 +22,12 @@ router.post("/addTimeSlot", turfController.addSlot);
 
 
 /** Get routes */
-router.get("/getAllturf", turfController.getAllturf);
-router.get("/getoneTurf/:id", turfController.oneTurf);
-router.get("/getTurfAdmin/:id", TurfAdminControll.getTufAdmin);
-router.get("/get/:id",turfController.getTurf)
-router.get("/getSlot/:date",turfController.getslot)
-router.get("/getOrder/:id",turfController.getOrders)
+router.get("/getAllturf", verifyJWT,turfController.getAllturf);
+router.get("/getoneTurf/:id", verifyJWT,turfController.oneTurf);
+router.get("/getTurfAdmin/:id",verifyJWT, TurfAdminControll.getTufAdmin);
+router.get("/get/:id",verifyJWT,turfController.getTurf)
+router.get("/getSlot/:date",verifyJWT,turfController.getslot)
+router.get("/getOrder/:id",verifyJWT,turfController.getOrders)
 
 /** Put routes */
 router.put("/updateTurf", turfController.uploadImage);

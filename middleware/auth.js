@@ -37,9 +37,15 @@ const validateAdminToken = async (req, res, next) => {
     return res.status(400).send({ error: "authentication failed" });
   }
 };
+const isAuths = async (req, res, next) => {
+
+
+  next();
+};
 
 module.exports = {
   isAuth,
   localVariables,
   validateAdminToken,
+  isAuths
 };

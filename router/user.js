@@ -22,9 +22,9 @@ router.get("/user/:username",userControll.getUser);
 router.get("/generateOtp",userAuth.localVariables,userControll.generateOtp);
 router.get("/verifyOtp",userControll.verifyOtp);
 router.get("/createResetSession",userControll.createResetSession);
-router.get("/getAllTurfs",userTurfController.getAllTurfs)
-router.get("/getOneTurf/:id",userTurfController.getoneTurf)
-router.get("/filterd/:game",userTurfController.filterData)
+router.get("/getAllTurfs",userAuth.isAuths,userTurfController.getAllTurfs)
+router.get("/getOneTurf/:id",userAuth.isAuths,userTurfController.getoneTurf)
+router.get("/filterd/:game",userAuth.isAuths,userTurfController.filterData)
 
 /** Put methods */
 router.put("/updateUser",userAuth.isAuth,userControll.updateUser);
