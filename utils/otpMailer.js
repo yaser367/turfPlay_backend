@@ -3,9 +3,9 @@ const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
 
 const transporter = nodemailer.createTransport({
-  host:"smtp.gmail.com",
-  port:587,
-  auth:{
+  host: "smtp.gmail.com",
+  port: 587,
+  auth: {
     user: process.env.EMAIL,
     pass: process.env.PASSOWRD,
   },
@@ -13,7 +13,6 @@ const transporter = nodemailer.createTransport({
 
 const sendOTPVerificationMail = async ({ _id, email }, req, res) => {
   try {
-    
     const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
     const mailOptions = {
       from: process.env.EMAIL,
@@ -32,13 +31,12 @@ const sendOTPVerificationMail = async ({ _id, email }, req, res) => {
     });
     await newOTP.save();
 
-    await transporter.sendMail(mailOptions)
+    await transporter.sendMail(mailOptions);
   } catch (error) {
-    console.log(error)
-    res.status(401)
+    return res.status(401).send(error);
   }
 };
 
 module.exports = {
-    sendOTPVerificationMail
-}
+  sendOTPVerificationMail,
+};

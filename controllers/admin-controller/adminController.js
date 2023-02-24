@@ -80,7 +80,6 @@ const getTurfRequest = async (req, res) => {
     }).populate("TurfAdminId");
     return res.status(201).send({ turfs });
   } catch (error) {
-    console.log(error);
     return res.status(401).send(error);
   }
 };
@@ -99,7 +98,6 @@ const acceptRequest = async (req, res) => {
 };
 const rejectRequest = async (req, res) => {
   try {
-    console.log("first");
     const { id } = req.body;
     await Turf.findByIdAndUpdate(
       { _id: id },
@@ -151,7 +149,7 @@ const totalSale = async (req, res) => {
       },
     ]);
 
-    res.status(200).send({totalsales})
+    res.status(200).send({ totalsales });
   } catch (error) {}
 };
 

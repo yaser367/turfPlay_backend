@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const Admin = require("../../models/Admin");
-const jwt = require('jsonwebtoken')
+const jwt = require("jsonwebtoken");
 
 const login = async (req, res) => {
   try {
@@ -8,14 +8,13 @@ const login = async (req, res) => {
     if (admin.length == 0) {
       const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD, 12);
       const newAdmin = new Admin({
-        userName:process.env.ADMIN_USERNAME,
+        userName: process.env.ADMIN_USERNAME,
         password: hashedPassword,
       });
       await newAdmin.save();
     }
 
     const { userName, password } = req.body;
-    console.log(userName,password)
     const existAdmin = await Admin.findOne({ userName });
     if (!existAdmin) {
       return res.status(400).send({ error: "Not found" });
@@ -32,7 +31,7 @@ const login = async (req, res) => {
           },
           process.env.JWT_ADMIN_SECRET
         );
-        return res.status(200).send({token})
+        return res.status(200).send({ token });
       }
     }
   } catch (error) {
@@ -41,5 +40,5 @@ const login = async (req, res) => {
 };
 
 module.exports = {
-    login
-}
+  login,
+};

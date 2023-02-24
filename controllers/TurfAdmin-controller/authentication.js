@@ -3,8 +3,6 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const handleLogin = async (req, res) => {
-  // console.log("first")
-
   try {
     const cookies = req.cookies;
 
@@ -13,7 +11,10 @@ const handleLogin = async (req, res) => {
       return res
         .status(400)
         .json({ message: "email and password are required." });
-    const admin = await TurfAdmin.findOne({ email: email,otpverified:true }).exec();
+    const admin = await TurfAdmin.findOne({
+      email: email,
+      otpverified: true,
+    }).exec();
 
     if (!admin) return res.sendStatus(401);
     //   if (admin.isVerified === false) return res.sendStatus(402);
@@ -72,7 +73,8 @@ const handleLogin = async (req, res) => {
       res.sendStatus(401);
     }
   } catch (error) {
-    return console.log(error);
+    return res.status(500).send(error);
+
   }
 };
 

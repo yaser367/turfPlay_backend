@@ -30,10 +30,9 @@ const checkout = async (req, res) => {
       slot
     })
     const booking = await payment.save()
-    console.log(booking)
     res.status(200).send({ order,booking });
   } catch (error) {
-    console.log(error);
+   
     res.status(500).send(error);
   }
 };
@@ -64,7 +63,22 @@ const paymentVerification = async (req, res) => {
   } catch (error) {}
 };
 
+const getOrders = async(req,res)=>{
+  try {
+    let page = parseInt(req.query.page) || 1;
+     
+     page --;
+     const limitNum = 6;
+    const order = await Order.find({}).populate("turfId").sort({createdAt:-1}).skip(page*limitNum).limit(limitNum)
+    res.status(200).send(order)
+  } catch (error) {
+    return res.status(401).send(error);
+
+  }
+}
+
 module.exports = {
   checkout,
   paymentVerification,
+  getOrders
 };

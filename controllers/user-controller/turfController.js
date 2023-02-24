@@ -2,7 +2,11 @@ const Turf = require("../../models/Turf");
 
 const getAllTurfs = async (req, res) => {
   try {
-    const turfs = await Turf.find({isListed:true,isAdminApproved:true,isAdminRejected:false});
+    let page = parseInt(req.query.page) || 1;
+    page --;
+    const limitNum = 3;
+    const turfs = await Turf.find({isListed:true,isAdminApproved:true,isAdminRejected:false}).skip(page*limitNum).limit(limitNum)
+    console.log(page)
     res.status(200).send(turfs);
   } catch (error) {
     res.status(500).send(error);
@@ -56,7 +60,6 @@ const filterData = async (req, res) => {
           { elevens: { $nin: ["", 0] } },
         ],
       });
-      console.log(turfs);
       res.status(200).send({ turfs });
     }
   } catch (error) {

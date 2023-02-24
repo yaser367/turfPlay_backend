@@ -45,12 +45,11 @@ const addTurf = async (req, res) => {
             res
               .status(201)
               .send({ message: "Turf Registred successfully", result })
-          // console.log(result)
         )
         .catch((error) => res.status(500).send({ error }));
     }
   } catch (error) {
-    console.log(error);
+  
     return res.status(401).send(error);
   }
 };
@@ -97,8 +96,9 @@ const addLocation = async (req, res) => {
 const getAllturf = async (req, res) => {
   try {
     const id = req.headers.id;
+
     const turfs = await Turf.find({ TurfAdminId: id, uploadImage: true });
-    res.status(200).send({ turfs });
+    res.status(200).send( {turfs} );
   } catch (error) {
     return res.status(401).send(error);
   }
@@ -238,7 +238,7 @@ const addSlot = async (req, res) => {
       }
     }
   } catch (error) {
-    console.log(error);
+ 
     return res.status(401).send(error);
   }
 };
@@ -249,7 +249,6 @@ const deleteTurfImg = async (req, res) => {
     await Turf.updateOne({ _id: id }, { $pull: { ImageUrl: deleteUrl } });
     res.status(200).send({ message: "deleted" });
   } catch (error) {
-    console.log(error);
     return res.status(401).send(error);
   }
 };
@@ -273,16 +272,17 @@ const getslot = async (req, res) => {
     const slot = await Slots.findOne({ TurfId: id, game, date: dateString });
     res.status(200).send({ slot });
   } catch (error) {
-    console.log(error);
+    return res.status(401).send(error);
+
   }
 };
 
 const getOrders = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(id);
+   
     const page = req.headers.page || 0;
-    console.log(page);
+    
     const docsPerPage = 6;
     const count = await Order.find({ turfId: id }).count();
     const totalPage = Math.ceil(count / docsPerPage);
@@ -293,7 +293,8 @@ const getOrders = async (req, res) => {
       .sort({ date: -1 });
     res.status(200).send({ order, totalPage });
   } catch (error) {
-    console.log(error);
+    return res.status(401).send(error);
+
   }
 };
 
@@ -301,11 +302,11 @@ const bookSlot = async(req,res) => {
   try {
     const {id,play,date,slot} = req.body;
     const stringDate = new Date(date).toLocaleDateString()
-    console.log(stringDate)
     await Slots.updateOne({TurfId:id ,game:play,date:stringDate,slots:{$elemMatch:{slot}}},{$set:{"slots.$.booked":true}})
     res.status(200).send({message:"booked"});
   } catch (error) {
-    console.log(error);
+    return res.status(401).send(error);
+
   }
 };
 
