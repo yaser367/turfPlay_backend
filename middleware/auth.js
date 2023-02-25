@@ -39,7 +39,6 @@ const validateAdminToken = async (req, res, next) => {
 };
 const isAuths = async (req, res, next) => {
 
-
   next();
 };
 
