@@ -72,6 +72,7 @@ const getOrders = async(req,res)=>{
     const order = await Order.find({}).populate("turfId").sort({createdAt:-1}).skip(page*limitNum).limit(limitNum)
     res.status(200).send(order)
   } catch (error) {
+    
     return res.status(401).send(error);
 
   }
