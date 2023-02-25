@@ -23,6 +23,7 @@ const verifyUser = async (req, res, next) => {
 const userRegistration = async (req, res) => {
   try {
     const { username, password, profile, email } = req.body.credentials;
+    console.log(req.body)
     const sentcode = req.body.sentcode;
     const userExist = await User.findOne({ username });
 
