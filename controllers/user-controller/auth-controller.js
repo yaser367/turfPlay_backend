@@ -197,7 +197,6 @@ const userOtpverify = async (req, res) => {
       await otp.deleteMany({ userId: userName });
       return res.status(200).send({ message: "Updated Successfuly" });
     } else {
-      // await otp.findOneAndRemove({userId:userName})
       return res.status(401).send({ error: "otp not match" });
     }
   } catch (error) {

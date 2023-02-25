@@ -6,7 +6,6 @@ const getAllTurfs = async (req, res) => {
     page --;
     const limitNum = 3;
     const turfs = await Turf.find({isListed:true,isAdminApproved:true,isAdminRejected:false}).skip(page*limitNum).limit(limitNum)
-    console.log(page)
     res.status(200).send(turfs);
   } catch (error) {
     res.status(500).send(error);
