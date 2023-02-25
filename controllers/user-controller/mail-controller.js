@@ -19,7 +19,9 @@ const transporter = nodemailer.createTransport({
   })
 
   const registerMail = async (req,res)=>{
-    const {username, userEmail, text, subject} = req.body;
+
+    try {
+      const {username, userEmail, text, subject} = req.body;
 
     //body of the email
     let email = {
@@ -40,6 +42,11 @@ const transporter = nodemailer.createTransport({
 
     await transporter.sendMail(mailOptions)
     return res.status(200).send({message:"successfully sent"})
+    } catch (error) {
+      res.status(500).send(error)
+      console.log(error)
+    }
+    
 
   }
 
