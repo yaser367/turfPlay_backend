@@ -55,7 +55,7 @@ const userRegistration = async (req, res) => {
             res.status(201).send({ message: "user Registred successfully" });
           })
           .catch((error) =>console.log(error)
-          //  res.status(500).send({ error })
+         
            );
       
         }
