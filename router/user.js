@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express();
-
 const userControll = require("../controllers/user-controller/auth-controller");
 const userAuth = require('../middleware/auth')
 const mailControll = require('../controllers/user-controller/mail-controller')
@@ -25,7 +24,7 @@ router.get("/createResetSession",userControll.createResetSession);
 router.get("/getAllTurfs",userAuth.isAuths,userTurfController.getAllTurfs)
 router.get("/getOneTurf/:id",userAuth.isAuths,userTurfController.getoneTurf)
 router.get("/filterd/:game",userAuth.isAuths,userTurfController.filterData)
-router.get("/getOrders",userAuth.isAuths,checkoutControll.getOrders)
+router.get("/getOrders/:id",userAuth.isAuths,checkoutControll.getOrders)
 
 /** Put methods */
 router.put("/updateUser",userAuth.isAuth,userControll.updateUser);

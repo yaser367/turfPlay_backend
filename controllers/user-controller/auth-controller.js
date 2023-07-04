@@ -23,7 +23,6 @@ const verifyUser = async (req, res, next) => {
 const userRegistration = async (req, res) => {
   try {
     const { username, password, profile, email } = req.body.credentials;
-    console.log(req.body)
     const sentcode = req.body.sentcode;
     const userExist = await User.findOne({ username });
 
@@ -50,15 +49,14 @@ const userRegistration = async (req, res) => {
         });
         await user
           .save()
-          .then(async (result) => {
-            console.log(result)
-            res.status(201).send({ message: "user Registred successfully" });
+          .then(async (data) => {
+            return res.status(201).send({ message: "user Registred successfully" });
           })
           .catch((error) =>console.log(error)
          
            );
       
-        }
+        } 
     }
   } catch (error) {
     return res.status(500).send(error);

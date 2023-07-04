@@ -2,6 +2,7 @@ const Razorpay = require("razorpay");
 const crypto = require("crypto");
 const Order = require("../../models/Order");
 const Slot = require("../../models/TimeSlot")
+const User = require("../../models/User");
 
 let instance = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
@@ -66,13 +67,14 @@ const paymentVerification = async (req, res) => {
 const getOrders = async(req,res)=>{
   try {
     let page = parseInt(req.query.page) || 1;
-     
+    let {id} = req.params;
      page --;
      const limitNum = 6;
-    const order = await Order.find({}).populate("turfId").sort({createdAt:-1}).skip(page*limitNum).limit(limitNum)
+     const user = await User.findOne({_id:id});
+
+    const order = await Order.find({username:user.username}).populate("turfId").sort({createdAt:-1}).skip(page*limitNum).limit(limitNum)
     res.status(200).send(order)
   } catch (error) {
-    
     return res.status(401).send(error);
 
   }
